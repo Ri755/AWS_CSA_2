@@ -1,0 +1,399 @@
+{
+  "Metadata": {
+    "AWSToolsMetrics": {
+      "IaC_Generator": "arn:aws:cloudformation:us-east-1:442605942687:generatedTemplate/ac50b1e5-f9c2-4291-a8b5-6d43e2dd6129"
+    }
+  },
+  "Parameters": {
+    "LambdaFunctionCsawarungbulisbackendCodeS3Bucketglmaj": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "An Amazon S3 bucket in the same AWS-Region as your function. The bucket can be in a different AWS-account."
+    },
+    "LambdaFunctionCsawarungbulisbackendCodeS3ObjectStorageModeiziPC": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "Possible values: [COPY, REFERENCE]\nThis property can be replaced with other types"
+    },
+    "LambdaFunctionCsawarungbulisbackendCodeZipFile4XDuY": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "(Node.js and Python) The source code of your Lambda function. If you include your function source inline with this parameter, CFN places it in a file named ``index`` and zips it to create a [deployment package](https://docs.aws.amazon.com/lambda/latest/dg/gettingstarted-package.html). This zip file cannot exceed 4MB. For the ``Handler`` property, the first part of the handler identifier must be ``index``. For example, ``index.handler``.\n  When you specify source code inline for a Node.js function, the ``index`` file that CFN creates uses the extension ``.js``. This means that Node.js treats the file as a CommonJS module.\n When using Node.js 24 or later, Node.js can automatically detect if a ``.js`` file should be treated as CommonJS or as an ES module. To enable auto-detection, add the ``--experimental-detect-module`` flag to the ``NODE_OPTIONS`` environment variable. For more information, see [Experimental Node.js features](https://docs.aws.amazon.com//lambda/latest/dg/lambda-nodejs.html#nodejs-experimental-features).\n   For JSON, you must escape quotes and special characters such as newline (``\\n``) with a backslash.\n If you specify a function that interacts with an AWS CloudFormation custom resource, you don't have to write your own functions to send responses to the custom resource that invoked the function. AWS CloudFormation provides a response module ([cfn-response](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-lambda-function-code-cfnresponsemodule.html)) that simplifies sending responses. See [Using Lambda with CloudFormation](https://docs.aws.amazon.com/lambda/latest/dg/services-cloudformation.html) for details."
+    },
+    "LambdaFunctionCsawarungbulisbackendCodeSourceKMSKeyArnxycjE": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "The ARN of the KMSlong (KMS) customer managed key that's used to encrypt your function's .zip deployment package. If you don't provide a customer managed key, Lambda uses an [owned key](https://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#aws-owned-cmk)."
+    },
+    "LambdaFunctionCsawarungbulisbackendCodeImageUri33yKF": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "URI of a [container image](https://docs.aws.amazon.com/lambda/latest/dg/lambda-images.html) in the Amazon ECR registry."
+    },
+    "LambdaFunctionCsawarungbulisbackendCodeS3ObjectVersionGe1xS": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "For versioned objects, the version of the deployment package object to use."
+    },
+    "LambdaFunctionCsawarungbulisbackendCodeS3KeyXZCLV": {
+      "NoEcho": "true",
+      "Type": "String",
+      "Description": "The Amazon S3 key of the deployment package."
+    }
+  },
+  "Resources": {
+    "ApiGatewayV2IntegrationTU": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "IntegrationUri": "arn:aws:lambda:us-east-1:442605942687:function:csa-warungbulis-backend",
+        "PayloadFormatVersion": "2.0",
+        "ConnectionType": "INTERNET",
+        "RequestTemplates": {},
+        "ResponseParameters": {},
+        "TimeoutInMillis": 30000,
+        "ApiId": "1evkp8cqdd",
+        "IntegrationMethod": "POST",
+        "IntegrationType": "AWS_PROXY"
+      }
+    },
+    "ApiGatewayV2Deployment": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::ApiGatewayV2::Deployment",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "ApiId": "1evkp8cqdd",
+        "Description": "Automatic deployment triggered by changes to the Api configuration"
+      }
+    },
+    "CloudWatchAlarmRDSCPUUtilizationHigh": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::CloudWatch::Alarm",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "missing",
+        "Dimensions": [
+          {
+            "Value": "csa-warungbulis-db",
+            "Name": "DBInstanceIdentifier"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Namespace": "AWS/RDS",
+        "OKActions": [],
+        "AlarmActions": [
+          "arn:aws:sns:us-east-1:442605942687:WarungBulisAlarm"
+        ],
+        "MetricName": "CPUUtilization",
+        "ActionsEnabled": true,
+        "AlarmDescription": "Alarm when RDS CPU Utilization exceeds 80% for 5 minutes.",
+        "AlarmName": "RDS-CPUUtilization-High",
+        "Statistic": "Average",
+        "InsufficientDataActions": [],
+        "DatapointsToAlarm": 1,
+        "Tags": [],
+        "Threshold": 80
+      }
+    },
+    "LambdaPermissionFunctioncsawarungbulisbackend": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::Lambda::Permission",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": "arn:aws:lambda:us-east-1:442605942687:function:csa-warungbulis-backend",
+        "Action": "lambda:InvokeFunction",
+        "SourceArn": "arn:aws:execute-api:us-east-1:442605942687:1evkp8cqdd/*/*/{proxy+}",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    },
+    "SNSTopicWarungBulisAlarm": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::SNS::Topic",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FifoTopic": false,
+        "Subscription": [
+          {
+            "Endpoint": "richard.t23@mhs.istts.ac.id",
+            "Protocol": "email"
+          }
+        ],
+        "ArchivePolicy": {},
+        "TopicName": "WarungBulisAlarm"
+      }
+    },
+    "ApiGatewayV2RouteGS": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::ApiGatewayV2::Route",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "Target": "integrations/hxjfypn",
+        "RequestModels": {},
+        "AuthorizationScopes": [],
+        "ApiKeyRequired": false,
+        "RouteKey": "ANY /{proxy+}",
+        "AuthorizationType": "NONE",
+        "ApiId": "1evkp8cqdd"
+      }
+    },
+    "CloudWatchAlarmAPIGateway4XXError": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::CloudWatch::Alarm",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "Dimensions": [
+          {
+            "Value": "1evkp8cqdd",
+            "Name": "ApiId"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Namespace": "AWS/ApiGateway",
+        "OKActions": [],
+        "AlarmActions": [
+          "arn:aws:sns:us-east-1:442605942687:WarungBulisAlarm"
+        ],
+        "MetricName": "4xx",
+        "ActionsEnabled": true,
+        "AlarmDescription": "Alarm when API Gateway returns one or more 4XX errors within 5 minutes.",
+        "AlarmName": "APIGateway-4XXError",
+        "Statistic": "Sum",
+        "InsufficientDataActions": [],
+        "DatapointsToAlarm": 1,
+        "Tags": [],
+        "Threshold": 1
+      }
+    },
+    "CloudWatchAlarmCSAWarungBulisLambdaErrors": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::CloudWatch::Alarm",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "missing",
+        "Dimensions": [
+          {
+            "Value": "csa-warungbulis-backend",
+            "Name": "FunctionName"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Namespace": "AWS/Lambda",
+        "OKActions": [],
+        "AlarmActions": [
+          "arn:aws:sns:us-east-1:442605942687:WarungBulisAlarm"
+        ],
+        "MetricName": "Errors",
+        "ActionsEnabled": true,
+        "AlarmDescription": "Alarm akan aktif apabila Lambda menghasilkan minimal 1 error dalam periode evaluasi.\nDigunakan untuk monitoring backend aplikasi Warung Bulis.",
+        "AlarmName": "CSA-WarungBulis-Lambda-Errors",
+        "Statistic": "Sum",
+        "InsufficientDataActions": [],
+        "DatapointsToAlarm": 1,
+        "Tags": [],
+        "Threshold": 1
+      }
+    },
+    "CloudWatchAlarmAPIGateway5XXError": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::CloudWatch::Alarm",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanOrEqualToThreshold",
+        "TreatMissingData": "notBreaching",
+        "Dimensions": [
+          {
+            "Value": "1evkp8cqdd",
+            "Name": "ApiId"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Namespace": "AWS/ApiGateway",
+        "OKActions": [],
+        "AlarmActions": [
+          "arn:aws:sns:us-east-1:442605942687:WarungBulisAlarm"
+        ],
+        "MetricName": "5xx",
+        "ActionsEnabled": true,
+        "AlarmDescription": "Alarm when API Gateway returns one or more 5XX errors within 5 minutes.",
+        "AlarmName": "APIGateway-5XXError",
+        "Statistic": "Sum",
+        "InsufficientDataActions": [],
+        "DatapointsToAlarm": 1,
+        "Tags": [],
+        "Threshold": 1
+      }
+    },
+    "ApiGatewayV2Api": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::ApiGatewayV2::Api",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "IpAddressType": "ipv4",
+        "RouteSelectionExpression": "$request.method $request.path",
+        "DisableExecuteApiEndpoint": false,
+        "ProtocolType": "HTTP",
+        "Tags": {},
+        "Name": "csa-warungbulis-api"
+      }
+    },
+    "ApiGatewayV2Integration": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::ApiGatewayV2::Integration",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "IntegrationUri": "arn:aws:lambda:us-east-1:442605942687:function:csa-warungbulis-backend",
+        "PayloadFormatVersion": "2.0",
+        "ConnectionType": "INTERNET",
+        "RequestTemplates": {},
+        "ResponseParameters": {},
+        "TimeoutInMillis": 30000,
+        "ApiId": "1evkp8cqdd",
+        "IntegrationMethod": "POST",
+        "IntegrationType": "AWS_PROXY"
+      }
+    },
+    "ApiGatewayV2Route": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::ApiGatewayV2::Route",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "Target": "integrations/fdbmf22",
+        "RequestModels": {},
+        "AuthorizationScopes": [],
+        "ApiKeyRequired": false,
+        "RouteKey": "ANY /",
+        "AuthorizationType": "NONE",
+        "ApiId": "1evkp8cqdd"
+      }
+    },
+    "LambdaFunctionCsawarungbulisbackend": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::Lambda::Function",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "MemorySize": 512,
+        "Description": "",
+        "TracingConfig": {
+          "Mode": "PassThrough"
+        },
+        "VpcConfig": {
+          "SecurityGroupIds": [
+            "sg-0246fa68298cc4f7e"
+          ],
+          "SubnetIds": [
+            "subnet-032bd467e1070ed54",
+            "subnet-0d56a531a2e04e172"
+          ],
+          "Ipv6AllowedForDualStack": false
+        },
+        "Timeout": 900,
+        "RuntimeManagementConfig": {
+          "UpdateRuntimeOn": "Auto"
+        },
+        "Handler": "lambda.handler",
+        "Code": {
+          "SourceKMSKeyArn": {
+            "Ref": "LambdaFunctionCsawarungbulisbackendCodeSourceKMSKeyArnxycjE"
+          },
+          "S3ObjectVersion": {
+            "Ref": "LambdaFunctionCsawarungbulisbackendCodeS3ObjectVersionGe1xS"
+          },
+          "S3Bucket": {
+            "Ref": "LambdaFunctionCsawarungbulisbackendCodeS3Bucketglmaj"
+          },
+          "ZipFile": {
+            "Ref": "LambdaFunctionCsawarungbulisbackendCodeZipFile4XDuY"
+          },
+          "S3Key": {
+            "Ref": "LambdaFunctionCsawarungbulisbackendCodeS3KeyXZCLV"
+          },
+          "S3ObjectStorageMode": {
+            "Ref": "LambdaFunctionCsawarungbulisbackendCodeS3ObjectStorageModeiziPC"
+          },
+          "ImageUri": {
+            "Ref": "LambdaFunctionCsawarungbulisbackendCodeImageUri33yKF"
+          }
+        },
+        "Role": "arn:aws:iam::442605942687:role/LabRole",
+        "FileSystemConfigs": [],
+        "FunctionName": "csa-warungbulis-backend",
+        "Runtime": "nodejs22.x",
+        "PackageType": "Zip",
+        "LoggingConfig": {
+          "LogFormat": "Text",
+          "LogGroup": "/aws/lambda/csa-warungbulis-backend"
+        },
+        "RecursiveLoop": "Terminate",
+        "Environment": {
+          "Variables": {
+            "DB_DIALECT": "mysql",
+            "PORT": "3000",
+            "DB_PORT": "3306",
+            "JWT_SECRET": "HEI_Antek_Antek_Asing_123",
+            "DB_USER": "admin",
+            "DB_NAME": "warungbulis",
+            "JWT_EXPIRES": "1h",
+            "DB_HOST": "csa-warungbulis-db.cnekyq6oe23y.us-east-1.rds.amazonaws.com",
+            "DB_PASSWORD": "WarungBulis#2026"
+          }
+        },
+        "EphemeralStorage": {
+          "Size": 512
+        },
+        "Architectures": [
+          "x86_64"
+        ]
+      }
+    },
+    "CloudWatchAlarmLambdaDurationCSAWarungBulis": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::CloudWatch::Alarm",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "ComparisonOperator": "GreaterThanThreshold",
+        "TreatMissingData": "missing",
+        "Dimensions": [
+          {
+            "Value": "csa-warungbulis-backend",
+            "Name": "FunctionName"
+          }
+        ],
+        "Period": 300,
+        "EvaluationPeriods": 1,
+        "Namespace": "AWS/Lambda",
+        "OKActions": [],
+        "AlarmActions": [
+          "arn:aws:sns:us-east-1:442605942687:WarungBulisAlarm"
+        ],
+        "MetricName": "Duration",
+        "ActionsEnabled": true,
+        "AlarmName": "Lambda-Duration-CSA-WarungBulis",
+        "Statistic": "Maximum",
+        "InsufficientDataActions": [],
+        "DatapointsToAlarm": 1,
+        "Tags": [],
+        "Threshold": 5000
+      }
+    },
+    "LambdaPermissionFunctioncsawarungbulisbackendJr": {
+      "UpdateReplacePolicy": "Retain",
+      "Type": "AWS::Lambda::Permission",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": "arn:aws:lambda:us-east-1:442605942687:function:csa-warungbulis-backend",
+        "Action": "lambda:InvokeFunction",
+        "SourceArn": "arn:aws:execute-api:us-east-1:442605942687:1evkp8cqdd/*/*/",
+        "Principal": "apigateway.amazonaws.com"
+      }
+    }
+  }
+}
